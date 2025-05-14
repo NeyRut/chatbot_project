@@ -5,7 +5,7 @@ from config import TOKEN
 
 DB_NAME = 'solar_system.sqlite'
 
-# === Логирование ===
+# Логирование
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ HELLO_TEXT = """
 """
 
 
-# === Функции работы с БД ===
+# Функции работы с БД
 def clean_value(value):
     if not value:
         return "Не найдено"
@@ -54,7 +54,7 @@ def get_small_body_by_name(body_name):
     return result
 
 
-# === Обработчики команд ===
+# Обработчики команд
 async def start(update: ContextTypes.DEFAULT_TYPE, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(HELLO_TEXT)
 
@@ -63,7 +63,7 @@ async def handle_message(update: ContextTypes.DEFAULT_TYPE, context: ContextType
     text = update.message.text.lower()
     logger.info(f"Пользователь написал: '{text}'")
 
-    # ==== СОЛНЦЕ ====
+    # СОЛНЦЕ
     if text == "солнце":
         reply = """
         Про Солнце можно узнать:
@@ -100,7 +100,7 @@ async def handle_message(update: ContextTypes.DEFAULT_TYPE, context: ContextType
         else:
             await update.message.reply_text("Неизвестный параметр. Попробуй ещё раз.")
 
-    # ==== ПЛАНЕТЫ ====
+    # ПЛАНЕТЫ
     elif any(p.lower() in text for p in ["меркурий", "венера", "земля", "марс", "юпитер", "сатурн", "уран", "нептун"]):
         planet = next(p for p in ["Меркурий", "Венера", "Земля", "Марс", "Юпитер", "Сатурн", "Уран", "Нептун"] if
                       p.lower() in text)
@@ -155,7 +155,7 @@ async def handle_message(update: ContextTypes.DEFAULT_TYPE, context: ContextType
         else:
             await update.message.reply_text("Неизвестный параметр. Попробуй ещё раз.")
 
-    # ==== АСТЕРОИДЫ / КОМЕТЫ ====
+    # АСТЕРОИДЫ/КОМЕТЫ
     elif any(b in text for b in ["C/2024 G3", "2022 YO1", "2011 CQ1"]):
         body = next(b for b in ["C/2024 G3", "2022 YO1", "2011 CQ1"] if b.lower() in text)
         info = get_small_body_by_name(body)
@@ -187,7 +187,7 @@ async def handle_message(update: ContextTypes.DEFAULT_TYPE, context: ContextType
         else:
             await update.message.reply_text("Неизвестный параметр. Попробуй ещё раз.")
 
-    # ==== ДРУГИЕ КОМАНДЫ ====
+
     elif "планеты" in text:
         planets = ["Меркурий", "Венера", "Земля", "Марс", "Юпитер", "Сатурн", "Уран", "Нептун"]
         await update.message.reply_text("Планеты Солнечной системы:\n" + "\n".join(planets))
@@ -207,7 +207,7 @@ async def handle_message(update: ContextTypes.DEFAULT_TYPE, context: ContextType
         await update.message.reply_text("Не понял запрос. Напиши /start, чтобы посмотреть доступные команды.")
 
 
-# === Основная функция запуска ===
+# Функция запуска
 def main():
     application = Application.builder().token(TOKEN).build()
 
